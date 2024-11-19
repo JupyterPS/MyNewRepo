@@ -1,20 +1,41 @@
-# Step 1: Start from Jupyter base notebook
+# Step 1: Use the official Jupyter base notebook image
 FROM jupyter/base-notebook:latest
 
-# Step 2: Upgrade pip and install required dependencies
+# Step 2: Upgrade pip to the latest version
 RUN python -m pip install --upgrade pip
+
+# Step 3: Install required build dependencies (setuptools, wheel, etc.)
+RUN pip install setuptools wheel setuptools_scm
+
+# Step 4: Install required Python dependencies from requirements.txt
 COPY requirements.txt ./requirements.txt
-RUN python -m pip install -r requirements.txt
-RUN python -m pip install --upgrade --no-deps --force-reinstall notebook
+RUN pip install --use-pep517 --no-cache-dir -r requirements.txt
 
-# Step 3: Install JupyterLab extensions
-RUN python -m pip install jupyterlab_github
-RUN python -m pip install jupyterlab-git
+# Step 5: Install matplotlib separately to avoid any build issues
+RUN pip install matplotlib
 
-# Install PowerShell and .NET SDK
-RUN apt-get update && apt-get install -y curl powershell
+# Step 6: Install additional libraries and tools
+RUN apt-get update && apt-get install -y \
+    curl \
+    powershell \
+    libicu66
 
-# Step 4: Install .NET Core SDK and .NET Interactive
+# Step 7: Install JupyterLab extensions and other Python packages
+RUN pip install jupyterlab_github
+RUN pip install jupyterlab-git
+RUN jupyter labextension install @jupyterlab/git
+
+# Step 8: Install .NET CLI dependencies for .NET Core SDK
+RUN apt-get install -y \
+    libc6 \
+    libgcc1 \
+    libgssapi-krb5-2 \
+    libssl1.1 \
+    libstdc++6 \
+    zlib1g \
+    && rm -rf /var/lib/apt/lists/*
+
+# Step 9: Install .NET Core SDK
 RUN dotnet_sdk_version=3.1.301 \
     && curl -SL --output dotnet.tar.gz https://dotnetcli.azureedge.net/dotnet/Sdk/$dotnet_sdk_version/dotnet-sdk-$dotnet_sdk_version-linux-x64.tar.gz \
     && dotnet_sha512='dd39931df438b8c1561f9a3bdb50f72372e29e5706d3fb4c490692f04a3d55f5acc0b46b8049bc7ea34dedba63c71b4c64c57032740cbea81eef1dce41929b4e' \
@@ -22,42 +43,42 @@ RUN dotnet_sdk_version=3.1.301 \
     && mkdir -p /usr/share/dotnet \
     && tar -ozxf dotnet.tar.gz -C /usr/share/dotnet \
     && rm dotnet.tar.gz \
-    && ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet
+    && ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet \
+    && dotnet help
 
-# Step 5: Install .NET Interactive Jupyter kernel
-RUN dotnet tool install --global Microsoft.dotnet-interactive --version 1.0.155302
-RUN dotnet interactive jupyter install
+# Step 10: Copy custom notebooks, configuration files, and sources
+COPY ./config ${HOME}/.jupyter/
+COPY ./ ${HOME}/Notebooks/
+COPY ./NuGet.config ${HOME}/nuget.config
 
-# Step 6: Set user-related environment variables
+# Step 11: Set user-related environment variables
 ARG NB_USER=jovyan
 ARG NB_UID=1000
 ENV USER ${NB_USER}
 ENV NB_UID ${NB_UID}
 ENV HOME /home/${NB_USER}
 
-# Step 7: Copy necessary configuration and script files
-COPY ./config ${HOME}/.jupyter/
-COPY ./ ${HOME}/WindowsPowerShell/
-COPY ./NuGet.config ${HOME}/nuget.config
+# Step 12: Switch to root user to install additional dependencies (if needed)
+USER root
+RUN apt-get update && apt-get install -y curl
 
-# Step 8: Set the working directory to Notebooks
-WORKDIR ${HOME}/WindowsPowerShell/
-
-# Step 9: Fix permissions and set the user back to jovyan
-RUN chown -R ${NB_UID} ${HOME}
-USER ${USER}
-
-# Step 10: Install nteract for Jupyter
+# Step 13: Install nteract for Jupyter (for enhanced notebook interaction)
 RUN pip install nteract_on_jupyter
 
-# Step 11: Install any remaining Python dependencies
-RUN python -m pip install --user numpy spotipy scipy matplotlib ipython jupyter pandas sympy nose
+# Step 14: Install .NET Interactive globally for .NET notebooks
+RUN dotnet tool install --global Microsoft.dotnet-interactive --version 1.0.155302 --add-source "https://dotnet.myget.org/F/dotnet-try/api/v3/index.json"
 
-# Step 12: Enable telemetry after installing Jupyter
+# Step 15: Update PATH with .NET tools directory
+ENV PATH="${PATH}:${HOME}/.dotnet/tools"
+
+# Step 16: Install Jupyter Kernel for .NET Interactive
+RUN dotnet interactive jupyter install
+
+# Step 17: Enable telemetry after installing Jupyter
 ENV DOTNET_TRY_CLI_TELEMETRY_OPTOUT=false
 
-# Step 13: Set the working directory to Notebooks
-WORKDIR ${HOME}/WindowsPowerShell/
+# Step 18: Set the working directory for notebooks
+WORKDIR ${HOME}/Notebooks/
 
-# Final step: Set the entry point (optional depending on your setup)
-CMD ["start-notebook.sh"]
+# Final Step: Expose port for JupyterLab
+EXPOSE 8888
