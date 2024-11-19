@@ -1,0 +1,32 @@
+name: Install PowerShell Kernel for Jupyter
+
+on:
+  push:
+    branches:
+      - main  # or the branch you want
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest  # Can use other environments like `windows-latest` if needed
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          # Install .NET Core SDK (for PowerShell kernel)
+          curl -SL --output dotnet.tar.gz https://dotnetcli.azureedge.net/dotnet/Sdk/3.1.301/dotnet-sdk-3.1.301-linux-x64.tar.gz
+          tar -ozxf dotnet.tar.gz -C /usr/share/dotnet
+          ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet
+          dotnet interactive jupyter install
+
+      - name: Build JupyterLab
+        run: jupyter lab build
