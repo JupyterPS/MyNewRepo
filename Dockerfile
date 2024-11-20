@@ -11,7 +11,16 @@ RUN pip install setuptools wheel setuptools_scm
 COPY requirements.txt ./requirements.txt
 RUN pip install --use-pep517 --no-cache-dir -r requirements.txt
 
-# Step 5: Install matplotlib separately to avoid any build issues
+# Step 4: Install PowerShell by adding the Microsoft repository
+RUN curl https://packages.microsoft.com/keys/microsoft.asc | tee /etc/apt/trusted.gpg.d/microsoft.asc \
+    && curl https://packages.microsoft.com/config/ubuntu/22.04/prod.list | tee /etc/apt/sources.list.d/microsoft-prod.list \
+    && apt-get update && apt-get install -y powershell \
+    && rm -rf /var/lib/apt/lists/*
+
+# Step 6: Install the PowerShell Jupyter kernel
+RUN pip install powershell-kernel
+
+# Step 7: Install any additional Python dependencies (e.g., matplotlib)
 RUN pip install matplotlib
 
 # Step 6: Install additional libraries and tools
@@ -82,3 +91,4 @@ WORKDIR ${HOME}/Notebooks/
 
 # Final Step: Expose port for JupyterLab
 EXPOSE 8888
+
