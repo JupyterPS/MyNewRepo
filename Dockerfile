@@ -1,20 +1,8 @@
-# Base Image
+# Step 1: Use the official Jupyter base notebook image
 FROM jupyter/base-notebook:latest
 
-# Switch to root user for system-level installations
+# Step 2: Install necessary system packages (including PowerShell)
 USER root
-
-# Install essential system tools and PowerShell
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    curl \
-    gnupg \
-    apt-transport-https \
-    software-properties-common \
-    && curl https://packages.microsoft.com/keys/microsoft.asc | tee /etc/apt/trusted.gpg.d/microsoft.asc \
-    && curl https://packages.microsoft.com/config/ubuntu/22.04/prod.list | tee /etc/apt/sources.list.d/microsoft-prod.list \
-    && apt-get update && apt-get install -y powershell \
-    && rm -rf /var/lib/apt/lists/*
 
 # Step 3: Install necessary packages, including curl and apt dependencies
 RUN apt-get update && apt-get install -y \
@@ -49,30 +37,16 @@ RUN pip install matplotlib
 
 # Step 8: Install requirements from a requirements.txt file (if available)
 COPY requirements.txt ./requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt    
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Install Python dependencies
-RUN python -m pip install --upgrade pip \
-    && pip install powershell-kernel matplotlib
-
-# Set up PowerShell kernel for Jupyter
+# Step 9: Setup PowerShell kernel (automatically runs when the container starts)
 RUN python -m powershell_kernel.install
 
-# Switch back to the default Jupyter user
+# Step 10: Switch back to the default Jupyter user
 USER $NB_USER
 
-# Expose Jupyter's default port
+# Step 11: Expose the necessary JupyterLab port
 EXPOSE 8888
 
-# Command to start Jupyter Lab
+# Step 12: Set the entrypoint to start Jupyter Lab with PowerShell available as a kernel
 CMD ["start.sh", "jupyter", "lab", "--NotebookApp.token=''"]
- 
-
- 
-
-
-
- 
-
- 
- 
