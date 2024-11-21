@@ -66,7 +66,7 @@ COPY requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Step 9: Setup PowerShell kernel (automatically runs when the container starts)
-RUN python -m powershell_kernel.install
+#RUN python -m powershell_kernel.install
 
 # Step 8: Install requirements from a requirements.txt file (if available)             <<<<
 #COPY requirements.txt ./requirements.txt
