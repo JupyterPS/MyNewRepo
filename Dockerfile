@@ -73,8 +73,8 @@ RUN python -m powershell_kernel.install
 #RUN pip install --no-cache-dir -r requirements.txt    
 
 # Install Python dependencies                                                           <<<<
-RUN python -m pip install --upgrade pip \
-    && pip install powershell-kernel matplotlib
+#RUN python -m pip install --upgrade pip \
+ #   && pip install powershell-kernel matplotlib
 
 # Step 10: Switch back to the default Jupyter user
 USER $NB_USER
