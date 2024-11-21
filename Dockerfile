@@ -29,6 +29,10 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | tee /etc/apt/truste
 # Step 5: Upgrade pip to the latest version
 RUN python -m pip install --upgrade pip
 
+# Reinstall Jupyter notebook for compatibility
+RUN python -m pip install --upgrade --no-deps --force-reinstall notebook
+RUN python -m pip install --user numpy spotipy scipy matplotlib ipython jupyter pandas sympy nose
+
 RUN jupyter lab build 
 # Install JupyterLab Git and related extensions
 RUN python -m pip install jupyterlab-git jupyterlab_github
@@ -55,3 +59,4 @@ EXPOSE 8888
 
 # Step 12: Set the entrypoint to start Jupyter Lab with PowerShell available as a kernel
 CMD ["start.sh", "jupyter", "lab", "--NotebookApp.token=''"]
+ 
