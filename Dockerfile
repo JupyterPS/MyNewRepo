@@ -29,9 +29,9 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | tee /etc/apt/truste
 # Step 5: Upgrade pip to the latest version
 RUN python -m pip install --upgrade pip
 
-# Reinstall Jupyter notebook for compatibility                                      3
-#RUN python -m pip install --upgrade --no-deps --force-reinstall notebook
-#RUN python -m pip install --user numpy spotipy scipy matplotlib ipython jupyter pandas sympy nose
+# Reinstall Jupyter notebook for compatibility                                    <<<<<<<<<<<<<< 0
+RUN python -m pip install --upgrade --no-deps --force-reinstall notebook
+RUN python -m pip install --user numpy spotipy scipy matplotlib ipython jupyter pandas sympy nose
 
 RUN jupyter lab build 
 
@@ -90,9 +90,9 @@ RUN python -m powershell_kernel.install
 COPY requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt    
 
-# Install Python dependencies                                       <<<<<<<<<<<<<<< 0 
-RUN python -m pip install --upgrade pip \
-    && pip install powershell-kernel matplotlib
+# Install Python dependencies                                       <<<<<<<<<<<<<<< 3 
+#RUN python -m pip install --upgrade pip \
+#    && pip install powershell-kernel matplotlib
 
 # Step 10: Switch back to the default Jupyter user
 USER $NB_USER
