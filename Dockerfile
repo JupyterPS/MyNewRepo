@@ -61,9 +61,28 @@ RUN pip install powershell-kernel
 # Step 7: Install any additional Python dependencies (e.g., matplotlib)
 RUN pip install matplotlib
 
-# Step 8: Install requirements from a requirements.txt file (if available)
+# Step 6: Install the PowerShell Jupyter kernel                              <<<<
+RUN pip install powershell-kernel
+
+# Step 7: Install any additional Python dependencies (e.g., matplotlib)         <<<<<
+RUN pip install matplotlib
+
+# Step 8: Install requirements from a requirements.txt file (if available)           <<<<
 COPY requirements.txt ./requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt    
+
+# Install Python dependencies                                          <<<<<
+RUN python -m pip install --upgrade pip \
+    && pip install powershell-kernel matplotlib
+
+# Set up PowerShell kernel for Jupyter                               <<<<
+RUN python -m powershell_kernel.install
+
+
+
+# Step 8: Install requirements from a requirements.txt file (if available)
+#COPY requirements.txt ./requirements.txt
+#RUN pip install --no-cache-dir -r requirements.txt
 
 # Step 9: Setup PowerShell kernel (automatically runs when the container starts)
 #RUN python -m powershell_kernel.install
