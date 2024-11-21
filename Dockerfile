@@ -40,7 +40,7 @@ RUN jupyter lab build
 
 #Working Directory
 # Install Jupyter themes and additional Python packages        <<<<<<<<<<<< 2
-RUN python -m pip install jupyterthemes numpy spotipy scipy matplotlib ipython jupyter pandas sympy nose ipywidgets
+#RUN python -m pip install jupyterthemes numpy spotipy scipy matplotlib ipython jupyter pandas sympy nose ipywidgets
 
 # Set up the working directory
 WORKDIR $HOME
