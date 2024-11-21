@@ -55,16 +55,16 @@ ENV HOME /home/${NB_USER}
 # Change to root user to install system dependencies
 USER root
 RUN apt-get update
-RUN apt-get install -y curl
-ENV \
+#RUN apt-get install -y curl
+#ENV \
     # Enable detection of running in a container
-    DOTNET_RUNNING_IN_CONTAINER=true \
+#    DOTNET_RUNNING_IN_CONTAINER=true \
     # Enable correct mode for dotnet watch (only mode supported in a container)
-    DOTNET_USE_POLLING_FILE_WATCHER=true \
+ #   DOTNET_USE_POLLING_FILE_WATCHER=true \
     # Skip extraction of XML docs - generally not useful within an image/container - helps performance
-    NUGET_XMLDOC_MODE=skip \
+  #  NUGET_XMLDOC_MODE=skip \
     # Opt out of telemetry until after we install jupyter when building the image, this prevents caching of machine id
-    DOTNET_TRY_CLI_TELEMETRY_OPTOUT=true
+   # DOTNET_TRY_CLI_TELEMETRY_OPTOUT=true
     
 # Install .NET CLI dependencies
 RUN apt-get update \
