@@ -69,8 +69,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 RUN python -m powershell_kernel.install
 
 # Step 8: Install requirements from a requirements.txt file (if available)             <<<<
-COPY requirements.txt ./requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt    
+#COPY requirements.txt ./requirements.txt
+#RUN pip install --no-cache-dir -r requirements.txt    
 
 # Install Python dependencies                                                           <<<<
 RUN python -m pip install --upgrade pip \
