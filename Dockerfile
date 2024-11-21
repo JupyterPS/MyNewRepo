@@ -34,13 +34,13 @@ RUN python -m pip install --upgrade pip
 #RUN python -m pip install --user numpy spotipy scipy matplotlib ipython jupyter pandas sympy nose
 
 RUN jupyter lab build 
-# Install JupyterLab Git and related extensions                <<<<<<<<<<<<
+# Install JupyterLab Git and related extensions                <<<<<<<<<<<< 1
 RUN python -m pip install jupyterlab-git jupyterlab_github
 RUN jupyter labextension install @jupyterlab/git
 
 #Working Directory
-# Install Jupyter themes and additional Python packages
-#RUN python -m pip install jupyterthemes numpy spotipy scipy matplotlib ipython jupyter pandas sympy nose ipywidgets
+# Install Jupyter themes and additional Python packages        <<<<<<<<<<<< 
+RUN python -m pip install jupyterthemes numpy spotipy scipy matplotlib ipython jupyter pandas sympy nose ipywidgets
 
 # Set up the working directory
 WORKDIR $HOME
