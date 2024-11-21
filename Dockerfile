@@ -54,32 +54,6 @@ ENV HOME /home/${NB_USER}
 
 # Change to root user to install system dependencies
 USER root
- 
-    
-# Install .NET CLI dependencies
-RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        libc6 \
-        libgcc1 \
-        libgssapi-krb5-2 \
-        libicu66 \
-        libssl1.1 \
-        libstdc++6 \
-        zlib1g \
-    && rm -rf /var/lib/apt/lists/*
-    
-# Install .NET Core SDK
-RUN dotnet_sdk_version=3.1.301 \
-    && curl -SL --output dotnet.tar.gz https://dotnetcli.azureedge.net/dotnet/Sdk/$dotnet_sdk_version/dotnet-sdk-$dotnet_sdk_version-linux-x64.tar.gz \
-    && dotnet_sha512='dd39931df438b8c1561f9a3bdb50f72372e29e5706d3fb4c490692f04a3d55f5acc0b46b8049bc7ea34dedba63c71b4c64c57032740cbea81eef1dce41929b4e' \
-    && echo "$dotnet_sha512 dotnet.tar.gz" | sha512sum -c - \
-    && mkdir -p /usr/share/dotnet \
-    && tar -ozxf dotnet.tar.gz -C /usr/share/dotnet \
-    && rm dotnet.tar.gz \
-    && ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet \
-    # Trigger first run experience by running arbitrary cmd
-    && dotnet help
-    
 
 # Step 6: Install the PowerShell Jupyter kernel
 RUN pip install powershell-kernel
