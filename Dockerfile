@@ -29,6 +29,11 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | tee /etc/apt/truste
 # Step 5: Upgrade pip to the latest version
 RUN python -m pip install --upgrade pip
 
+RUN jupyter lab build 
+# Install JupyterLab Git and related extensions
+RUN python -m pip install jupyterlab-git jupyterlab_github
+RUN jupyter labextension install @jupyterlab/git
+
 # Step 6: Install the PowerShell Jupyter kernel
 RUN pip install powershell-kernel
 
