@@ -29,11 +29,7 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | tee /etc/apt/truste
 # Step 5: Upgrade pip to the latest version
 RUN python -m pip install --upgrade pip
 
-# Step 6: Reinstall Jupyter notebook for compatibility                                     
-RUN python -m pip install --upgrade --no-deps --force-reinstall notebook
-RUN python -m pip install --user numpy spotipy scipy matplotlib ipython jupyter pandas sympy nose
-
-# Reinstall Jupyter notebook for compatibility                                    <<<<<<<<<<<<<< 1
+# Step 6: Reinstall Jupyter notebook for compatibility                           <<<<<<<<<<<<<< 1                      
 #RUN python -m pip install --upgrade --no-deps --force-reinstall notebook
 #RUN python -m pip install --user numpy spotipy scipy matplotlib ipython jupyter pandas sympy nose
 
@@ -60,16 +56,7 @@ ENV HOME /home/${NB_USER}
 # Step 10: Change to root user to install system dependencies
 USER root
 
-# Step 11: Install the PowerShell Jupyter kernel
-RUN pip install powershell-kernel
-
 # Step 12: Install any additional Python dependencies (e.g., matplotlib)
-RUN pip install matplotlib
-
-# Step 13: Install the PowerShell Jupyter kernel                               
-RUN pip install powershell-kernel
-
-# Step 14: Install any additional Python dependencies (e.g., matplotlib)          
 RUN pip install matplotlib
 
 # Step 8: Install requirements from a requirements.txt file (if available)            
@@ -93,10 +80,6 @@ RUN python -m powershell_kernel.install
 # Step 15: Install requirements from a requirements.txt file (if available)       
 COPY requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt    
-
-# Install Python dependencies                                       <<<<<<<<<<<<<<< 3 
-#RUN python -m pip install --upgrade pip \
-#    && pip install powershell-kernel matplotlib
 
 # Step 16: Switch back to the default Jupyter user
 USER $NB_USER
