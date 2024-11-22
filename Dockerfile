@@ -37,7 +37,7 @@ RUN python -m pip install --user numpy spotipy scipy matplotlib ipython jupyter 
 #RUN python -m pip install --upgrade --no-deps --force-reinstall notebook
 #RUN python -m pip install --user numpy spotipy scipy matplotlib ipython jupyter pandas sympy nose
 
-# Step 7: RUN jupyter lab build 
+RUN jupyter lab build 
 
 # Install JupyterLab Git and related extensions                <<<<<<<<<<<< 2
 #RUN python -m pip install jupyterlab-git jupyterlab_github
