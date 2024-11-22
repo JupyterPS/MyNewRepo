@@ -56,6 +56,9 @@ ENV HOME /home/${NB_USER}
 # Step 10: Change to root user to install system dependencies
 USER root
 
+RUN pip install --upgrade notebook
+RUN pip install --upgrade ipykernel
+
 # Step 12: Install any additional Python dependencies (e.g., matplotlib)
 RUN pip install matplotlib
 
