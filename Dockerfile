@@ -57,7 +57,7 @@ ENV HOME /home/${NB_USER}
 USER root
 
 RUN pip install --upgrade notebook
-RUN pip install --upgrade ipykernel
+#RUN pip install --upgrade ipykernel
 
 # Step 12: Install any additional Python dependencies (e.g., matplotlib)
 RUN pip install matplotlib
