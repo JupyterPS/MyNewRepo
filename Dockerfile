@@ -36,9 +36,8 @@ RUN python -m pip install --user numpy spotipy scipy matplotlib ipython jupyter 
 # Step 7: Build JupyterLab
 RUN jupyter lab build --dev-build=False --minimize=False
 
-# Step 8: Install JupyterLab Git and related extensions
+# Step 8: Install JupyterLab Git and related extensions using pip
 RUN python -m pip install jupyterlab-git jupyterlab_github
-RUN jupyter labextension install @jupyterlab/git
 
 # Step 9: Install Jupyter themes and additional Python packages
 RUN python -m pip install jupyterthemes numpy spotipy scipy matplotlib ipython jupyter pandas sympy nose ipywidgets
@@ -55,7 +54,7 @@ ENV HOME /home/${NB_USER}
 
 # Step 12: Change to root user to install system dependencies
 USER root
- 
+
 # Step 13: Upgrade Jupyter notebook
 RUN pip install --upgrade notebook
 
@@ -64,6 +63,21 @@ RUN pip install matplotlib
 
 # Step 15: Install requirements from a requirements.txt file (if available)
 COPY requirements.txt ./requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Step 16: Install PowerShell kernel for Jupyter
+RUN pip install powershell-kernel && \
+    python -m powershell_kernel.install
+
+# Step 17: Switch back to the default Jupyter user
+USER ${NB_USER}
+
+# Step 18: Expose the necessary JupyterLab port
+EXPOSE 8888
+
+# Step 19: Set the entrypoint to start Jupyter Lab with PowerShell available as a kernel
+CMD ["start.sh", "jupyter", "lab", "--NotebookApp.token=''"]
+
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Step 16: Install PowerShell kernel for Jupyter
