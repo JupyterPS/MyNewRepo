@@ -29,25 +29,20 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | tee /etc/apt/truste
 # Step 5: Upgrade pip to the latest version
 RUN python -m pip install --upgrade pip
 
-# Step 7: Install Tornado
+# Step 6: Install Tornado
 RUN python -m pip install tornado==6.2.0
 
-# Step 6: Reinstall Jupyter notebook for compatibility                           <<<<<<<<<<<<<< 1                      
-#RUN python -m pip install --upgrade --no-deps --force-reinstall notebook
-#RUN python -m pip install --user numpy spotipy scipy matplotlib ipython jupyter pandas sympy nose
-
+# Step 7: Build JupyterLab
 RUN jupyter lab build 
 
-# Install JupyterLab Git and related extensions                <<<<<<<<<<<< 2
-#RUN python -m pip install jupyterlab-git jupyterlab_github
-#RUN jupyter labextension install @jupyterlab/git
+# Install JupyterLab Git and related extensions
+RUN python -m pip install jupyterlab-git jupyterlab_github
 
-#Working Directory
-# Install Jupyter themes and additional Python packages        <<<<<<<<<<<< 3
-#RUN python -m pip install jupyterthemes numpy spotipy scipy matplotlib ipython jupyter pandas sympy nose ipywidgets
+# Install Jupyter themes and additional Python packages
+RUN python -m pip install jupyterthemes numpy spotipy scipy matplotlib ipython jupyter pandas sympy nose ipywidgets
 
 # Step 8: Set up the working directory
-WORKDIR $HOME
+WORKDIR /home/jovyan
 
 # Step 9: Set up user and home environment variables
 ARG NB_USER=jovyan
@@ -59,40 +54,25 @@ ENV HOME /home/${NB_USER}
 # Step 10: Change to root user to install system dependencies
 USER root
 
+# Step 11: Upgrade Jupyter notebook
 RUN pip install --upgrade notebook
-#RUN pip install --upgrade ipykernel
 
 # Step 12: Install any additional Python dependencies (e.g., matplotlib)
 RUN pip install matplotlib
 
-# Step 8: Install requirements from a requirements.txt file (if available)            
+# Step 13: Install requirements from a requirements.txt file (if available)
 COPY requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt    
 
-# Install Python dependencies                                           
-RUN python -m pip install --upgrade pip \
-    && pip install powershell-kernel matplotlib
+# Step 14: Install PowerShell kernel for Jupyter
+RUN pip install powershell-kernel && \
+    python -m powershell_kernel.install
 
-# Set up PowerShell kernel for Jupyter                                
-RUN python -m powershell_kernel.install
-
-# Step 8: Install requirements from a requirements.txt file (if available)
-COPY requirements.txt ./requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Step 9: Setup PowerShell kernel (automatically runs when the container starts)
-RUN python -m powershell_kernel.install
-
-# Step 15: Install requirements from a requirements.txt file (if available)       
-COPY requirements.txt ./requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt    
-
-# Step 16: Switch back to the default Jupyter user
+# Step 15: Switch back to the default Jupyter user
 USER $NB_USER
 
-# Step 17: Expose the necessary JupyterLab port
+# Step 16: Expose the necessary JupyterLab port
 EXPOSE 8888
 
-# Step 18: Set the entrypoint to start Jupyter Lab with PowerShell available as a kernel
+# Step 17: Set the entrypoint to start Jupyter Lab with PowerShell available as a kernel
 CMD ["start.sh", "jupyter", "lab", "--NotebookApp.token=''"]
-
