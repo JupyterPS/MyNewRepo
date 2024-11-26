@@ -29,6 +29,9 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | tee /etc/apt/truste
 # Step 5: Upgrade pip to the latest version
 RUN python -m pip install --upgrade pip
 
+# Step 7: Install Tornado
+RUN python -m pip install tornado==6.2.0
+
 # Step 6: Reinstall Jupyter notebook for compatibility                           <<<<<<<<<<<<<< 1                      
 #RUN python -m pip install --upgrade --no-deps --force-reinstall notebook
 #RUN python -m pip install --user numpy spotipy scipy matplotlib ipython jupyter pandas sympy nose
