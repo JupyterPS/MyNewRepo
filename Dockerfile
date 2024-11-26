@@ -65,24 +65,10 @@ RUN pip install matplotlib
 COPY requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Step 16: Install PowerShell kernel for Jupyter
+# Step 16: Install PowerShell kernel for Jupyter with proper permissions
 RUN pip install powershell-kernel && \
-    python -m powershell_kernel.install
-
-# Step 17: Switch back to the default Jupyter user
-USER ${NB_USER}
-
-# Step 18: Expose the necessary JupyterLab port
-EXPOSE 8888
-
-# Step 19: Set the entrypoint to start Jupyter Lab with PowerShell available as a kernel
-CMD ["start.sh", "jupyter", "lab", "--NotebookApp.token=''"]
-
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Step 16: Install PowerShell kernel for Jupyter
-RUN pip install powershell-kernel && \
-    python -m powershell_kernel.install
+    python -m powershell_kernel.install --user=root && \
+    chown -R ${NB_UID}:${NB_UID} /home/jovyan/.local/share/jupyter/kernels
 
 # Step 17: Switch back to the default Jupyter user
 USER ${NB_USER}
