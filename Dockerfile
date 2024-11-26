@@ -29,14 +29,16 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | tee /etc/apt/truste
 # Step 5: Upgrade pip to the latest version
 RUN python -m pip install --upgrade pip
 
-# Step 6: Install Tornado
-RUN python -m pip install tornado==6.2.0
+# Step 6: Reinstall Jupyter notebook for compatibility
+RUN python -m pip install --upgrade --no-deps --force-reinstall notebook
+RUN python -m pip install --user numpy spotipy scipy matplotlib ipython jupyter pandas sympy nose
 
 # Step 7: Build JupyterLab
 RUN jupyter lab build
 
 # Step 8: Install JupyterLab Git and related extensions
 RUN python -m pip install jupyterlab-git jupyterlab_github
+RUN jupyter labextension install @jupyterlab/git
 
 # Step 9: Install Jupyter themes and additional Python packages
 RUN python -m pip install jupyterthemes numpy spotipy scipy matplotlib ipython jupyter pandas sympy nose ipywidgets
