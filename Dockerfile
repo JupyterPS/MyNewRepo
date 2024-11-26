@@ -65,9 +65,9 @@ RUN pip install matplotlib
 COPY requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Step 16: Install PowerShell kernel for Jupyter with proper permissions
+# Step 16: Install PowerShell kernel for Jupyter without using `--user` argument
 RUN pip install powershell-kernel && \
-    python -m powershell_kernel.install --user=root && \
+    python -m powershell_kernel.install && \
     chown -R ${NB_UID}:${NB_UID} /home/jovyan/.local/share/jupyter/kernels
 
 # Step 17: Switch back to the default Jupyter user
