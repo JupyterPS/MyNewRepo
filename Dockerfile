@@ -55,7 +55,7 @@ ENV HOME /home/${NB_USER}
 
 # Step 12: Change to root user to install system dependencies
 USER root
-
+ 
 # Step 13: Upgrade Jupyter notebook
 RUN pip install --upgrade notebook
 
