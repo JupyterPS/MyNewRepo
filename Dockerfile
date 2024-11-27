@@ -35,3 +35,8 @@ EXPOSE 8888
 
 # Set the entrypoint to start Jupyter Lab
 CMD ["start.sh", "jupyter", "lab", "--NotebookApp.token=''"]
+
+# Install Jupyter notebook and basic packages for compatibility
+USER root
+RUN python -m pip install --upgrade --no-deps --force-reinstall notebook
+RUN python -m pip install --user numpy spotipy scipy matplotlib ipython jupyter pandas sympy nose
