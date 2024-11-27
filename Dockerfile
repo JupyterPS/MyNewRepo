@@ -1,7 +1,7 @@
-# Use the official Jupyter base notebook image with conda
-FROM jupyter/base-notebook:latest
+# Use the official Microsoft image that includes PowerShell
+FROM mcr.microsoft.com/powershell:latest
 
-# Install necessary system packages and PowerShell
+# Install necessary system packages
 USER root
 RUN apt-get update && apt-get install -y \
     build-essential \
@@ -21,10 +21,6 @@ RUN apt-get update && apt-get install -y \
     traceroute \
     apt-transport-https \
     software-properties-common \
-    && curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
-    && curl https://packages.microsoft.com/config/ubuntu/20.04/prod.list > /etc/apt/sources.list.d/microsoft-prod.list \
-    && apt-get update \
-    && apt-get install -y powershell \
     && rm -rf /var/lib/apt/lists/*
 
 # Upgrade pip
@@ -34,39 +30,27 @@ RUN python -m pip install --upgrade pip
 RUN pip install matplotlib
 
 # Set up the working directory
-WORKDIR /home/jovyan
+WORKDIR /workspace
 
-# Switch back to the default Jupyter user
-USER ${NB_USER}
+# Switch to a non-root user
+RUN useradd -ms /bin/bash myuser
+USER myuser
 
-# Expose the necessary JupyterLab port
+# Expose the necessary port
 EXPOSE 8888
 
-# Set the entrypoint to start Jupyter Lab
-CMD ["start.sh", "jupyter", "lab", "--NotebookApp.token=''"]
+# Install numpy and scipy using pip
+RUN pip install numpy scipy
 
-# Install numpy and scipy using conda
-USER root
-RUN conda install -y numpy scipy
+# Install additional packages
+RUN pip install spotipy ipython jupyter pandas sympy nose ipywidgets jupyterthemes jupyterlab-git jupyterlab_github
 
-# Install spotipy using pip
-RUN pip install spotipy
-
-# Install ipython, jupyter, pandas, sympy, nose, and ipywidgets using pip
-RUN pip install ipython jupyter pandas sympy nose ipywidgets
-
-# Build JupyterLab
+# Install JupyterLab
 RUN jupyter lab build --dev-build=False --minimize=False
 
-# Install JupyterLab Git and related extensions using pip
-RUN python -m pip install jupyterlab-git jupyterlab_github
-
-# Install Jupyter themes and additional Python packages
-RUN pip install jupyterthemes
-
-# Install requirements from a requirements.txt file (if available)
+# Copy requirements.txt if available
 COPY requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Verify PowerShell installation
-RUN pwsh -version
+# Default command to start PowerShell
+CMD ["pwsh"]
