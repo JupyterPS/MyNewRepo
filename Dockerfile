@@ -1,5 +1,5 @@
-# Use a base image compatible with PowerShell
-FROM mcr.microsoft.com/vscode/devcontainers/python:3.9
+# Use the Jupyter scipy notebook image that includes conda
+FROM jupyter/scipy-notebook:latest
 
 # Install necessary system packages
 USER root
@@ -45,10 +45,6 @@ EXPOSE 8888
 # Set the entrypoint to start Jupyter Lab
 CMD ["start.sh", "jupyter", "lab", "--NotebookApp.token=''"]
 
-# Install numpy and scipy using conda
-USER root
-RUN conda install -y numpy scipy
-
 # Install spotipy using pip
 RUN pip install spotipy
 
@@ -70,4 +66,3 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Verify PowerShell installation
 RUN pwsh -version
-
