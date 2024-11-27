@@ -21,7 +21,7 @@ RUN apt-get update && apt-get install -y \
 # Upgrade pip
 RUN python -m pip install --upgrade pip
 
-# Install Python packages
+# Install matplotlib (as it's already working with the first Dockerfile)
 RUN pip install matplotlib
 
 # Set up the working directory
@@ -36,7 +36,6 @@ EXPOSE 8888
 # Set the entrypoint to start Jupyter Lab
 CMD ["start.sh", "jupyter", "lab", "--NotebookApp.token=''"]
 
-# Install Jupyter notebook and basic packages for compatibility
+# Install only Jupyter notebook
 USER root
 RUN python -m pip install --upgrade --no-deps --force-reinstall notebook
-RUN python -m pip install --user numpy spotipy scipy matplotlib ipython jupyter pandas sympy nose
