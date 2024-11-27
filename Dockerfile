@@ -1,7 +1,7 @@
-# Use the working base image
+# Use the official Jupyter base notebook image
 FROM jupyter/base-notebook:latest
 
-# Steps 2-9 from the previous successful Dockerfile
+# Install necessary system packages
 USER root
 RUN apt-get update && apt-get install -y \
     build-essential \
@@ -15,21 +15,22 @@ RUN apt-get update && apt-get install -y \
     libfribidi-dev \
     curl \
     gnupg \
-    lsb-release \
-    && curl https://packages.microsoft.com/keys/microsoft.asc | tee /etc/apt/trusted.gpg.d/microsoft.asc \
-    && curl https://packages.microsoft.com/config/ubuntu/22.04/prod.list | tee /etc/apt/sources.list.d/microsoft-prod.list \
-    && apt-get update && apt-get install -y powershell \
-    && rm -rf /var/lib/apt/lists/*
+    lsb-release
 
+# Upgrade pip
 RUN python -m pip install --upgrade pip
+
+# Install minimal Python packages
 RUN pip install matplotlib
 
+# Set up the working directory
 WORKDIR /home/jovyan
-USER ${NB_USER}
-EXPOSE 8888
-CMD ["start.sh", "jupyter", "lab", "--NotebookApp.token=''"]
 
-# Step 10: Reinstall Jupyter notebook and basic packages for compatibility
-USER root
-RUN python -m pip install --upgrade --no-deps --force-reinstall notebook
-RUN python -m pip install --user numpy spotipy scipy matplotlib ipython jupyter pandas sympy nose
+# Switch back to the default Jupyter user
+USER ${NB_USER}
+
+# Expose the necessary JupyterLab port
+EXPOSE 8888
+
+# Set the entrypoint to start Jupyter Lab
+CMD ["start.sh", "jupyter", "lab", "--NotebookApp.token=''"]
