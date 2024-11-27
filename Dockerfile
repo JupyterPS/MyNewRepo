@@ -1,5 +1,5 @@
-# Use the official Jupyter base notebook image
-FROM jupyter/base-notebook:latest
+# Use a base image compatible with PowerShell
+FROM mcr.microsoft.com/vscode/devcontainers/python:3.9
 
 # Install necessary system packages
 USER root
@@ -69,4 +69,5 @@ COPY requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Verify PowerShell installation
-RUN pwsh -version || echo "PowerShell installation failed"
+RUN pwsh -version
+
