@@ -36,6 +36,6 @@ EXPOSE 8888
 # Set the entrypoint to start Jupyter Lab
 CMD ["start.sh", "jupyter", "lab", "--NotebookApp.token=''"]
 
-# Install numpy and scipy
+# Install only numpy
 USER root
-RUN python -m pip install --user numpy scipy
+RUN python -m pip install --user numpy
