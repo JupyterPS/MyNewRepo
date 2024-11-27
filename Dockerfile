@@ -21,7 +21,7 @@ RUN apt-get update && apt-get install -y \
 # Upgrade pip
 RUN python -m pip install --upgrade pip
 
-# Install matplotlib (as it's already working with the first Dockerfile)
+# Install matplotlib
 RUN pip install matplotlib
 
 # Set up the working directory
@@ -48,3 +48,13 @@ RUN pip install ipython jupyter pandas sympy nose ipywidgets
 
 # Build JupyterLab
 RUN jupyter lab build --dev-build=False --minimize=False
+
+# Install JupyterLab Git and related extensions using pip
+RUN python -m pip install jupyterlab-git jupyterlab_github
+
+# Install Jupyter themes and additional Python packages
+RUN pip install jupyterthemes
+
+# Install requirements from a requirements.txt file (if available)
+COPY requirements.txt ./requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
