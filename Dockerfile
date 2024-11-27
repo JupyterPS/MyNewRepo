@@ -40,5 +40,8 @@ CMD ["start.sh", "jupyter", "lab", "--NotebookApp.token=''"]
 USER root
 RUN conda install -y numpy scipy
 
-# Install spotipy and additional packages using pip
+# Install spotipy using pip
 RUN pip install spotipy
+
+# Install ipython, jupyter, pandas, sympy, nose, and ipywidgets using pip
+RUN pip install ipython jupyter pandas sympy nose ipywidgets
