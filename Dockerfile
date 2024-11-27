@@ -17,10 +17,10 @@ RUN apt-get update && apt-get install -y \
     curl \
     gnupg \
     lsb-release \
-    #&& curl https://packages.microsoft.com/keys/microsoft.asc | tee /etc/apt/trusted.gpg.d/microsoft.asc \
-    #&& curl https://packages.microsoft.com/config/ubuntu/22.04/prod.list | tee /etc/apt/sources.list.d/microsoft-prod.list \
-    #&& apt-get update && apt-get install -y powershell \
-    #&& rm -rf /var/lib/apt/lists/*
+    && curl https://packages.microsoft.com/keys/microsoft.asc | tee /etc/apt/trusted.gpg.d/microsoft.asc \
+    && curl https://packages.microsoft.com/config/ubuntu/22.04/prod.list | tee /etc/apt/sources.list.d/microsoft-prod.list \
+    && apt-get update && apt-get install -y powershell \
+    && rm -rf /var/lib/apt/lists/*
 
 # Step 3: Upgrade pip to the latest version
 RUN python -m pip install --upgrade pip
@@ -47,7 +47,7 @@ RUN python -m pip install --upgrade --no-deps --force-reinstall notebook
 RUN python -m pip install --user numpy spotipy scipy matplotlib ipython jupyter pandas sympy nose
 
 # Step 11: Build JupyterLab
-RUN jupyter lab build --dev-build=False --minimize=False
+#RUN jupyter lab build --dev-build=False --minimize=False
 
 # Step 12: Install JupyterLab Git and related extensions using pip
 RUN python -m pip install jupyterlab-git jupyterlab_github
