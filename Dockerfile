@@ -1,5 +1,5 @@
 # Step 1: Use the official Jupyter base notebook image
-FROM jupyter/base-notebook:latest
+FROM jupyter/main-notebook:latest
 
 # Step 2: Install necessary system packages (including PowerShell)
 USER root
