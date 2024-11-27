@@ -45,3 +45,6 @@ RUN pip install spotipy
 
 # Install ipython, jupyter, pandas, sympy, nose, and ipywidgets using pip
 RUN pip install ipython jupyter pandas sympy nose ipywidgets
+
+# Build JupyterLab
+RUN jupyter lab build --dev-build=False --minimize=False
