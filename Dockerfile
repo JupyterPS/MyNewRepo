@@ -61,7 +61,17 @@ COPY requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Install PowerShell
-RUN curl https://packages.microsoft.com/keys/microsoft.asc | tee /etc/apt/trusted.gpg.d/microsoft.asc \
-    && curl https://packages.microsoft.com/config/ubuntu/22.04/prod.list | tee /etc/apt/sources.list.d/microsoft-prod.list \
-    && apt-get update && apt-get install -y powershell \
+RUN apt-get update && apt-get install -y \
+    apt-transport-https \
+    software-properties-common
+
+# Import the Microsoft repository key
+RUN wget -q "https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb" \
+    && dpkg -i packages-microsoft-prod.deb
+
+# Install PowerShell
+RUN apt-get update && apt-get install -y powershell \
     && rm -rf /var/lib/apt/lists/*
+
+# Verify PowerShell installation
+RUN pwsh -version
