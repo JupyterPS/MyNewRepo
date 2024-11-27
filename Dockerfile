@@ -1,7 +1,7 @@
-# Use the official Jupyter base notebook image
+# Use a stable Jupyter base notebook image
 FROM jupyter/base-notebook:latest
 
-# Install necessary system packages and PowerShell
+# Install necessary system packages and PowerShell with retry logic
 USER root
 RUN apt-get update && apt-get install -y \
     build-essential \
@@ -21,8 +21,8 @@ RUN apt-get update && apt-get install -y \
     traceroute \
     apt-transport-https \
     software-properties-common \
-    && curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
-    && curl https://packages.microsoft.com/config/ubuntu/22.04/prod.list > /etc/apt/sources.list.d/microsoft-prod.list \
+    && (curl -s https://packages.microsoft.com/keys/microsoft.asc | apt-key add - || (sleep 5 && curl -s https://packages.microsoft.com/keys/microsoft.asc | apt-key add -)) \
+    && (curl -s https://packages.microsoft.com/config/ubuntu/20.04/prod.list > /etc/apt/sources.list.d/microsoft-prod.list || (sleep 5 && curl -s https://packages.microsoft.com/config/ubuntu/20.04/prod.list > /etc/apt/sources.list.d/microsoft-prod.list)) \
     && apt-get update \
     && apt-get install -y powershell \
     && rm -rf /var/lib/apt/lists/*
