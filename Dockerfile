@@ -7,6 +7,9 @@ RUN apt-get update && apt-get install -y \
     python3-pip \
     build-essential
 
+# Set environment variables if needed
+ENV PATH="/usr/local/bin/python3:$PATH"
+
 # Clean up APT when done
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
@@ -15,8 +18,5 @@ RUN pwsh -version && python3 --version
 
 # Default command to start PowerShell
 CMD ["pwsh"]
-
-
-
 
 
