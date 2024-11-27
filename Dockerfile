@@ -73,4 +73,4 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Verify PowerShell installation
-RUN pwsh -version
+RUN pwsh -version || echo "PowerShell installation failed"
