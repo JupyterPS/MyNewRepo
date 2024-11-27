@@ -19,6 +19,12 @@ RUN apt-get update && apt-get install -y \
     git \
     iputils-ping \
     traceroute \
+    apt-transport-https \
+    software-properties-common \
+    && curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
+    && curl https://packages.microsoft.com/config/ubuntu/20.04/prod.list > /etc/apt/sources.list.d/microsoft-prod.list \
+    && apt-get update \
+    && apt-get install -y powershell \
     && rm -rf /var/lib/apt/lists/*
 
 # Upgrade pip
@@ -61,16 +67,6 @@ RUN pip install jupyterthemes
 # Install requirements from a requirements.txt file (if available)
 COPY requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
-
-# Install PowerShell
-RUN apt-get update && apt-get install -y \
-    apt-transport-https \
-    software-properties-common \
-    && curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
-    && curl https://packages.microsoft.com/config/ubuntu/20.04/prod.list > /etc/apt/sources.list.d/microsoft-prod.list \
-    && apt-get update \
-    && apt-get install -y powershell \
-    && rm -rf /var/lib/apt/lists/*
 
 # Verify PowerShell installation
 RUN pwsh -version || echo "PowerShell installation failed"
