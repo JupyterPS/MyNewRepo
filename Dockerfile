@@ -1,8 +1,9 @@
-# Use Ubuntu as the base image
+# Use an Ubuntu base image
 FROM ubuntu:20.04
 
-# Install PowerShell
+# Install necessary system packages, including apt-utils, and PowerShell
 RUN apt-get update && apt-get install -y \
+    apt-utils \
     wget \
     apt-transport-https \
     software-properties-common \
@@ -14,5 +15,5 @@ RUN apt-get update && apt-get install -y \
 # Verify PowerShell installation
 RUN pwsh -version || echo "PowerShell installation failed"
 
-# Default command to start PowerShell
+# Set the default command to PowerShell
 CMD ["pwsh"]
