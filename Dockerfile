@@ -1,7 +1,7 @@
 # Use the official PowerShell image
 FROM mcr.microsoft.com/powershell:latest
 
-# Install necessary system packages
+# Install necessary system packages and Python
 USER root
 RUN apt-get update && apt-get install -y \
     wget \
@@ -22,13 +22,15 @@ RUN apt-get update && apt-get install -y \
     git \
     iputils-ping \
     traceroute \
+    python3 \
+    python3-pip \
     && rm -rf /var/lib/apt/lists/*
 
 # Upgrade pip
-RUN python -m pip install --upgrade pip
+RUN python3 -m pip install --upgrade pip
 
 # Install matplotlib
-RUN pip install matplotlib
+RUN python3 -m pip install matplotlib
 
 # Set up the working directory
 WORKDIR /workspace
@@ -37,14 +39,14 @@ WORKDIR /workspace
 EXPOSE 8888
 
 # Install numpy and scipy using pip
-RUN pip install numpy scipy
+RUN python3 -m pip install numpy scipy
 
 # Install additional packages
-RUN pip install spotipy ipython jupyter pandas sympy nose ipywidgets jupyterthemes jupyterlab-git jupyterlab_github
+RUN python3 -m pip install spotipy ipython jupyter pandas sympy nose ipywidgets jupyterthemes jupyterlab-git jupyterlab_github
 
 # Copy requirements.txt if available
 COPY requirements.txt ./requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
+RUN python3 -m pip install --no-cache-dir -r requirements.txt
 
 # Default command to start PowerShell
 CMD ["pwsh"]
