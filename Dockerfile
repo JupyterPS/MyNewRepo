@@ -46,7 +46,7 @@ RUN pip install spotipy
 
 # Install ipython, jupyter, pandas, sympy, nose, and ipywidgets using pip
 RUN pip install ipython jupyter pandas sympy nose ipywidgets
- 
+
 # Build JupyterLab
 RUN jupyter lab build --dev-build=False --minimize=False
 
@@ -61,7 +61,6 @@ COPY requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Install PowerShell
-USER root
 RUN curl https://packages.microsoft.com/keys/microsoft.asc | tee /etc/apt/trusted.gpg.d/microsoft.asc \
     && curl https://packages.microsoft.com/config/ubuntu/22.04/prod.list | tee /etc/apt/sources.list.d/microsoft-prod.list \
     && apt-get update && apt-get install -y powershell \
