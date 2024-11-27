@@ -1,5 +1,5 @@
-# Use the correct main image from MySecondRepo (ensure it's in lowercase and valid)
-FROM mysecondrepo/main_image:latest
+# Use the correct base image from MySecondRepo (ensure it's in lowercase and valid)
+FROM mysecondrepo/base_image:latest
 
 # Step 2: Install necessary system packages (including PowerShell)
 USER root
