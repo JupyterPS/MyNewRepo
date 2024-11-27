@@ -17,10 +17,10 @@ RUN apt-get update && apt-get install -y \
     curl \
     gnupg \
     lsb-release \
-    && curl https://packages.microsoft.com/keys/microsoft.asc | tee /etc/apt/trusted.gpg.d/microsoft.asc \
-    && curl https://packages.microsoft.com/config/ubuntu/22.04/prod.list | tee /etc/apt/sources.list.d/microsoft-prod.list \
-    && apt-get update && apt-get install -y powershell \
-    && rm -rf /var/lib/apt/lists/*
+    #&& curl https://packages.microsoft.com/keys/microsoft.asc | tee /etc/apt/trusted.gpg.d/microsoft.asc \
+    #&& curl https://packages.microsoft.com/config/ubuntu/22.04/prod.list | tee /etc/apt/sources.list.d/microsoft-prod.list \
+    #&& apt-get update && apt-get install -y powershell \
+    #&& rm -rf /var/lib/apt/lists/*
 
 # Step 3: Upgrade pip to the latest version
 RUN python -m pip install --upgrade pip
@@ -53,7 +53,7 @@ RUN jupyter lab build --dev-build=False --minimize=False
 RUN python -m pip install jupyterlab-git jupyterlab_github
 
 # Step 13: Install Jupyter themes and additional Python packages
-#RUN python -m pip install jupyterthemes numpy spotipy scipy matplotlib ipython jupyter pandas sympy nose ipywidgets
+RUN python -m pip install jupyterthemes numpy spotipy scipy matplotlib ipython jupyter pandas sympy nose ipywidgets
 
 # Step 14: Install requirements from a requirements.txt file (if available)
 COPY requirements.txt ./requirements.txt
