@@ -1,9 +1,8 @@
-# Use an Ubuntu base image
+# Use Ubuntu as the base image
 FROM ubuntu:20.04
 
-# Install necessary system packages, including apt-utils, and PowerShell
+# Install PowerShell
 RUN apt-get update && apt-get install -y \
-    apt-utils \
     wget \
     apt-transport-https \
     software-properties-common \
