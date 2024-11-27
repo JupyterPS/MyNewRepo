@@ -53,7 +53,7 @@ RUN jupyter lab build --dev-build=False --minimize=False
 RUN python -m pip install jupyterlab-git jupyterlab_github
 
 # Step 13: Install Jupyter themes and additional Python packages
-RUN python -m pip install jupyterthemes numpy spotipy scipy matplotlib ipython jupyter pandas sympy nose ipywidgets
+#RUN python -m pip install jupyterthemes numpy spotipy scipy matplotlib ipython jupyter pandas sympy nose ipywidgets
 
 # Step 14: Install requirements from a requirements.txt file (if available)
 COPY requirements.txt ./requirements.txt
