@@ -1,5 +1,5 @@
-# Use the correct base image from MySecondRepo (ensure it's in lowercase and valid)
-FROM mysecondrepo/base_image:latest
+# Step 1: Use the official Jupyter base notebook image
+FROM jupyter/base-notebook:latest
 
 # Step 2: Install necessary system packages (including PowerShell)
 USER root
