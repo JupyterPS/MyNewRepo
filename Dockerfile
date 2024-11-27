@@ -66,17 +66,3 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | tee /etc/apt/truste
     && curl https://packages.microsoft.com/config/ubuntu/22.04/prod.list | tee /etc/apt/sources.list.d/microsoft-prod.list \
     && apt-get update && apt-get install -y powershell \
     && rm -rf /var/lib/apt/lists/*
-
-# Step 23: Add Microsoft repository and install PowerShell
-#RUN wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && dpkg -i packages-microsoft-prod.deb && apt-get update && apt-get install -y powershell
-
-# Step 27: Final working directory
-#WORKDIR /home/jovyan/WindowsPowerShell/
-
-# Step 15: Install the .NET Interactive kernels (including PowerShell)
-#RUN dotnet-interactive jupyter install
-
-
-
-
-    
