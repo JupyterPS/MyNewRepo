@@ -1,7 +1,7 @@
-# Use the Jupyter scipy notebook image that includes conda
-FROM jupyter/scipy-notebook:latest
+# Use the official Jupyter base notebook image with conda
+FROM jupyter/base-notebook:latest
 
-# Install necessary system packages
+# Install necessary system packages and PowerShell
 USER root
 RUN apt-get update && apt-get install -y \
     build-essential \
@@ -44,6 +44,10 @@ EXPOSE 8888
 
 # Set the entrypoint to start Jupyter Lab
 CMD ["start.sh", "jupyter", "lab", "--NotebookApp.token=''"]
+
+# Install numpy and scipy using conda
+USER root
+RUN conda install -y numpy scipy
 
 # Install spotipy using pip
 RUN pip install spotipy
