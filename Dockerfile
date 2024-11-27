@@ -16,6 +16,7 @@ RUN apt-get update && apt-get install -y \
     curl \
     gnupg \
     lsb-release \
+    git \
     && rm -rf /var/lib/apt/lists/*
 
 # Upgrade pip
@@ -58,3 +59,10 @@ RUN pip install jupyterthemes
 # Install requirements from a requirements.txt file (if available)
 COPY requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
+
+# Install PowerShell
+USER root
+RUN curl https://packages.microsoft.com/keys/microsoft.asc | tee /etc/apt/trusted.gpg.d/microsoft.asc \
+    && curl https://packages.microsoft.com/config/ubuntu/22.04/prod.list | tee /etc/apt/sources.list.d/microsoft-prod.list \
+    && apt-get update && apt-get install -y powershell \
+    && rm -rf /var/lib/apt/lists/*
