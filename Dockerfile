@@ -21,7 +21,7 @@ RUN apt-get update && apt-get install -y \
 # Upgrade pip
 RUN python -m pip install --upgrade pip
 
-# Install matplotlib
+# Install matplotlib (as it's already working with the first Dockerfile)
 RUN pip install matplotlib
 
 # Set up the working directory
@@ -39,3 +39,6 @@ CMD ["start.sh", "jupyter", "lab", "--NotebookApp.token=''"]
 # Install numpy and scipy using conda
 USER root
 RUN conda install -y numpy scipy
+
+# Install spotipy and additional packages using pip
+RUN pip install spotipy
