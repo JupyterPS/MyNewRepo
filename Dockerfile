@@ -17,6 +17,8 @@ RUN apt-get update && apt-get install -y \
     gnupg \
     lsb-release \
     git \
+    iputils-ping \
+    traceroute \
     && rm -rf /var/lib/apt/lists/*
 
 # Upgrade pip
@@ -63,14 +65,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Install PowerShell
 RUN apt-get update && apt-get install -y \
     apt-transport-https \
-    software-properties-common
-
-# Import the Microsoft repository key
-RUN wget -q "https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb" \
-    && dpkg -i packages-microsoft-prod.deb
-
-# Install PowerShell
-RUN apt-get update && apt-get install -y powershell \
+    software-properties-common \
+    && curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
+    && curl https://packages.microsoft.com/config/ubuntu/20.04/prod.list > /etc/apt/sources.list.d/microsoft-prod.list \
+    && apt-get update \
+    && apt-get install -y powershell \
     && rm -rf /var/lib/apt/lists/*
 
 # Verify PowerShell installation
