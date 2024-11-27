@@ -3,15 +3,13 @@ FROM ubuntu:20.04
 
 # Install necessary system packages and PowerShell
 RUN apt-get update && apt-get install -y \
-    curl \
-    gnupg \
+    wget \
     apt-transport-https \
     software-properties-common \
-    && curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
-    && curl https://packages.microsoft.com/config/ubuntu/20.04/prod.list > /etc/apt/sources.list.d/microsoft-prod.list \
+    && wget -q https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb \
+    && dpkg -i packages-microsoft-prod.deb \
     && apt-get update \
-    && apt-get install -y powershell \
-    && rm -rf /var/lib/apt/lists/*
+    && apt-get install -y powershell
 
 # Set the default command to PowerShell
 CMD ["pwsh"]
