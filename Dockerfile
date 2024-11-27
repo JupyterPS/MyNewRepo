@@ -36,9 +36,6 @@ EXPOSE 8888
 # Set the entrypoint to start Jupyter Lab
 CMD ["start.sh", "jupyter", "lab", "--NotebookApp.token=''"]
 
-# Install numpy first
+# Install numpy and scipy using conda
 USER root
-RUN python -m pip install --user numpy
-
-# Install scipy in a separate step
-RUN python -m pip install --user scipy
+RUN conda install -y numpy scipy
